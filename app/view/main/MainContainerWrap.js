@@ -1,5 +1,5 @@
 Ext.define('Gui.view.main.MainContainerWrap', {
-    extend: 'Ext.Container',
+    extend: 'Ext.container.Container',
     xtype: 'containerWrap',
 
     requires: [

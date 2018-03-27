@@ -1,10 +1,35 @@
 Ext.define('Gui.view.input.InputView', {
-    extend: 'Ext.Container',
+    extend: 'Ext.panel.Panel',
     xtype: 'form-input',
+
+    controller: 'input',
+
+    requires: [
+        'Gui.store.InputStore',
+        'Gui.view.input.InputController',
+        'Ext.grid.Panel',
+        'Ext.toolbar.Paging',
+        'Ext.layout.container.VBox',
+        'Ext.toolbar.Paging'
+    ],
+
+    viewModel: {
+        type: 'input'
+    },
+
+    initComponent: function () {
+        this.callParent();
+        var store = Ext.getStore('inputStore');
+        store.getProxy().setConfig('extraParams', {
+            startDate: Ext.Date.format(new Date(new Date().getFullYear(), new Date().getMonth(), 1), 'd.m.Y')
+        });
+
+        this.getViewModel().set('inputStore', store);
+        // store.reload();
+    },
 
     title: 'Input',
 
-    controller: 'controller.input',
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -22,132 +47,146 @@ Ext.define('Gui.view.input.InputView', {
         labelWidth: 70
     },
 
+    listeners: {
+        resize: function(me, width, height) {
+            var gridHeight = height-300;
+            me.getViewModel().set('height', gridHeight);
+        }
+    },
+
     items: [
         {
             xtype: 'form',
             reference: 'inputForm',
-            layout: {
-                type: 'hbox'
+            items: [{
+                layout: 'hbox',
+                items: [
+                    {
+                        id: 'add_type',
+                        xtype: 'combo',
+                        fieldLabel: 'Tip',
+                        store: {
+                            type: 'array',
+                            fields: ['tip'],
+                            data: [
+                                ['Factura'],
+                                ['Bon de casa'],
+                                ['Bon de casa cu cod fiscal'],
+                                ['Aviz'],
+                                ['Taxare inversa']
+                            ]
+
+                        },
+                        queryMode: 'local',
+                        displayField: 'tip',
+                        valueField: 'tip',
+                        enableKeyEvents: true,
+                        forceSelection: true,
+                        selectOnTab: false,
+                        onReplicate: function () {
+                            this.getStore().clearFilter();
+                        },
+                        margin: '0 30 0 5',
+                        allowBlank: false
+                    },
+                    {
+                        id: 'add_docNo',
+                        xtype: 'textfield',
+                        fieldLabel: 'Nr. doc.',
+                        enableKeyEvents: true,
+                        margin: '0 30 0 0',
+                        allowBlank: false
+                    },
+                    {
+                        id: 'add_providerId',
+                        xtype: 'textfield',
+                        fieldLabel: 'Cod furnizor',
+                        enableKeyEvents: true,
+                        margin: '0 30 0 0',
+                        allowBlank: false
+                    },
+                    {
+                        id: 'add_providerName',
+                        xtype: 'textfield',
+                        fieldLabel: 'Nume furnizor',
+                        margin: '0 30 0 0',
+                        allowBlank: false
+                    },
+                    {
+                        id: 'add_releasDate',
+                        xtype: 'textfield',
+                        fieldLabel: 'Data',
+                        allowBlank: false
+                    }]
             },
-
-            items: [
                 {
-                    id: 'add_type',
-                    xtype: 'combo',
-                    fieldLabel: 'Tip',
-                    store: {
-                        type: 'array',
-                        field: ['tip'],
-                        data: [
-                            ['Factura'],
-                            ['Bon de casa'],
-                            ['Bon de casa cu cod fiscal'],
-                            ['Aviz'],
-                            ['Taxare inversa']
-                        ]
-
-                    },
-                    queryMode: 'local',
-                    displayField: 'tip',
-                    valueField: 'tip',
-                    plugins: {
-                        fieldreplicator: true
-                    },
-                    anchor: '0',
-                    // width: '30%',
-                    enableKeyEvents: true,
-                    forceSelection: true,
-                    selectOnTab: false,
-                    onReplicate: function () {
-                        this.getStore().clearFilter();
-                    }
-                },
-                {
-                    id: 'add_docNo',
-                    xtype: 'textfield',
-                    fieldLabel: 'Nr. doc.',
-                    // width: '30%',
-                    enableKeyEvents: true
-                },
-                {
-                    id: 'add_providerId',
-                    xtype: 'textfield',
-                    fieldLabel: 'Cod furnizor',
-                    // width: '30%',
-                    enableKeyEvents: true
-                },
-                {
-                    id: 'add_providerName',
-                    xtype: 'textfield',
-                    fieldLabel: 'Nume furnizor',
-                    // width: '30%',
-                },
-                {
-                    id: 'add_releasDate',
-                    xtype: 'textfield',
-                    fieldLabel: 'Data',
-                    // width: '30%',
-
-                },
-                {
-                    id: 'add_dueDate',
-                    xtype: 'textfield',
-                    fieldLabel: 'Data scadenta'
-                    // width: '30%',
-
-                },
-                {
-                    id: 'add_value',
-                    xtype: 'textfield',
-                    fieldLabel: 'Valoare'
-                    // width: '30%',
-
-                },
-                {
-                    id: 'add_tva',
-                    xtype: 'textfield',
-                    fieldLabel: 'TVA'
-                    // width: '30%',
-
-                },
-                {
-                    id: 'add_total',
-                    xtype: 'textfield',
-                    fieldLabel: 'Total',
-                    // width: '30%',
-
-                },
-                {
-                    id: 'add_toPay',
-                    xtype: 'textfield',
-                    fieldLabel: 'Neachitat',
-                    // width: '30%',
-                    enableKeyEvents: true,
-                    listeners: {
-                        'keypress': function(form, event) {
-                            if(event.getKey() == event.ENTER) {
-                                var myBtn = Ext.getCmp('add_saveButton');
-                                myBtn.fireHandler();
-                            }
+                    layout: 'hbox',
+                    items: [
+                        {
+                            id: 'add_dueDate',
+                            xtype: 'textfield',
+                            fieldLabel: 'Data scadenta',
+                            margin: '5 30 5 5'
+                        },
+                        {
+                            id: 'add_value',
+                            xtype: 'textfield',
+                            fieldLabel: 'Valoare',
+                            margin: '5 30 5 0',
+                            allowBlank: false
+                        },
+                        {
+                            id: 'add_tva',
+                            xtype: 'textfield',
+                            fieldLabel: 'TVA',
+                            margin: '5 30 5 0'
+                        },
+                        {
+                            id: 'add_total',
+                            xtype: 'textfield',
+                            fieldLabel: 'Total',
+                            margin: '5 30 5 0',
+                            allowBlank: false
+                        },
+                        {
+                            id: 'add_toPay',
+                            xtype: 'textfield',
+                            fieldLabel: 'Neachitat',
+                            enableKeyEvents: true,
+                            listeners: {
+                                'keypress': function (form, event) {
+                                    if (event.getKey() == event.ENTER) {
+                                        var myBtn = Ext.getCmp('add_saveButton');
+                                        myBtn.fireHandler();
+                                    }
+                                }
+                            },
+                            margin: '5 30 5 0',
+                            allowBlank: false
                         }
-                    }
+                    ]
+                }
+            ],
+            buttons: [
+                {
+                    xtype: 'button',
+                    text: 'Reset',
+                    width: 70,
+                    handler: 'onIReset'
                 },
                 {
                     id: 'add_saveButton',
                     xtype: 'button',
                     text: 'Save',
-                    margin: '0 0 0 420',
                     width: 70,
                     formBind: true,
                     handler: 'onISave'
                 },
                 {
                     xtype: 'button',
-                    text: 'Reset',
-                    margin: '-32 25 0 500',
+                    text: 'Provider',
                     width: 70,
-                    formBind: true,
-                    handler: 'onIReset'
+                    handler: 'onProviderClick'
                 }
             ]
         },
@@ -158,7 +197,8 @@ Ext.define('Gui.view.input.InputView', {
             flex: 1,
 
             bind: {
-                store: '{inputStore}'
+                store: '{inputStore}',
+                maxHeight: '{height}'
             },
 
             tbar: {
@@ -167,6 +207,8 @@ Ext.define('Gui.view.input.InputView', {
                 displayMsg: 'Display input {0} - {1} of {2}',
                 emptyMsg: 'No input to display'
             },
+
+            columnLines: true,
 
             columns: [
                 {
@@ -203,7 +245,10 @@ Ext.define('Gui.view.input.InputView', {
                     text: 'Data',
                     dataIndex: 'releaseDate',
                     resizable: true,
-                    flex: 1
+                    flex: 1,
+                    renderer: function(value) {
+                        return Ext.Date.format(new Date(value), 'd.m.Y');
+                    },
                 },
                 {
                     text: 'Data scadenta',

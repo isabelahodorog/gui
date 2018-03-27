@@ -13,6 +13,10 @@ Ext.define('Gui.view.main.MainController', {
 
     lastView: null,
 
+    init: function () {
+
+    },
+
     setCurrentView: function(hashTag) {
         hashTag = (hashTag || '').toLowerCase();
 

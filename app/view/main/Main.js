@@ -3,11 +3,18 @@ Ext.define('Gui.view.main.Main', {
     xtype: 'app-main',
 
     requires: [
+        'Gui.view.main.MainController',
+        'Gui.view.main.MainModel',
+        'Gui.view.main.MainContainerWrap',
         'Ext.plugin.Viewport',
         'Ext.window.MessageBox',
-
-        'Gui.view.main.MainController',
-        'Gui.view.main.MainModel'
+        'Ext.data.TreeStore',
+        'Ext.list.Tree',
+        'Ext.toolbar.Toolbar',
+        'Ext.container.Container',
+        'Ext.form.field.Display',
+        'Ext.layout.container.Card',
+        'Ext.layout.container.VBox'
     ],
 
     viewModel: 'main',
