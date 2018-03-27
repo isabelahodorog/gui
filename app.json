@@ -274,7 +274,7 @@
      */
     "production": {
         "ENV": {
-            "remoteBaseUrl": "licenta"
+            "remoteBaseUrl": ""
         },
         "output": {
             "appCache": {
@@ -298,7 +298,7 @@
      */
     "testing": {
         "ENV": {
-            "remoteBaseUrl": "licenta"
+            "remoteBaseUrl": ""
         }
     },
 
@@ -307,7 +307,7 @@
      */
     "development": {
         "ENV": {
-            "remoteBaseUrl": "licenta"
+            "remoteBaseUrl": ""
         },
         "watch": {
             "delay": 250

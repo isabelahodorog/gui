@@ -12,6 +12,10 @@ Ext.define('Gui.Application', {
         'InputStore'
     ],
 
+    // launch: function() {
+    //     Ext.create('app-main')
+    // },
+
     onAppUpdate: function () {
         Ext.Msg.confirm('Application Update', 'This application has an update, reload?',
             function (choice) {

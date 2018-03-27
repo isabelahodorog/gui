@@ -5,29 +5,19 @@ Ext.define('Gui.store.InputStore', {
     storeId: 'inputStore',
 
     requires: [
-        'Gui.model.InputModel',
+        'Ext.data.proxy.Rest',
         'Gui.util.RestApiUrlUtil',
-        'Gui.proxy.SearchParamsProxy',
-        'Ext.data.proxy.Rest'
+        'Ext.data.reader.Json'
     ],
 
-    uses: ['Ext.data.proxy.Rest'],
-
+    autoLoad: true,
     model: 'Gui.model.InputModel',
-    autoLoad: false,
-    remoteFilter: true,
-    remoteSort: true,
-
-    pageSize: 100,
 
     proxy: {
-        type: 'SearchParams',
+        type: 'ajax',
         url: Gui.util.RestApiUrlUtil.getGetInputUrl(),
         reader: {
-            type: 'json',
-            rootProperty: 'content',
-            totalProperty: 'totalElements',
-            model: 'Gui.model.InputModel'
+            type: 'json'
         }
     }
 });

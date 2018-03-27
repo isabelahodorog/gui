@@ -8,7 +8,7 @@ Ext.define('Gui.util.RestApiUrlUtil', {
             if(window.location.host.indexOf("localhost") !== -1) {
                 basePath = "http://localhost:8090/" + this.getEnv()['remoteBaseUrl'];
             }
-            return basePath + '/v1';
+            return basePath + 'input/v1';
         },
 
         getAddInputUrl: function () {
