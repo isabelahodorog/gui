@@ -2,8 +2,6 @@ Ext.define('Gui.view.input.InputView', {
     extend: 'Ext.panel.Panel',
     xtype: 'form-input',
 
-    controller: 'input',
-
     requires: [
         'Gui.store.InputStore',
         'Gui.view.input.InputController',
@@ -12,6 +10,8 @@ Ext.define('Gui.view.input.InputView', {
         'Ext.layout.container.VBox',
         'Ext.toolbar.Paging'
     ],
+
+    controller: 'input',
 
     viewModel: {
         type: 'input'
@@ -23,9 +23,8 @@ Ext.define('Gui.view.input.InputView', {
         store.getProxy().setConfig('extraParams', {
             startDate: Ext.Date.format(new Date(new Date().getFullYear(), new Date().getMonth(), 1), 'd.m.Y')
         });
-
+        store.reload();
         this.getViewModel().set('inputStore', store);
-        // store.reload();
     },
 
     title: 'Input',
@@ -62,130 +61,68 @@ Ext.define('Gui.view.input.InputView', {
                 layout: 'hbox',
                 items: [
                     {
-                        id: 'add_type',
-                        xtype: 'combo',
-                        fieldLabel: 'Tip',
-                        store: {
-                            type: 'array',
-                            fields: ['tip'],
-                            data: [
-                                ['Factura'],
-                                ['Bon de casa'],
-                                ['Bon de casa cu cod fiscal'],
-                                ['Aviz'],
-                                ['Taxare inversa']
-                            ]
-
-                        },
-                        queryMode: 'local',
-                        displayField: 'tip',
-                        valueField: 'tip',
-                        enableKeyEvents: true,
-                        forceSelection: true,
-                        selectOnTab: false,
-                        onReplicate: function () {
-                            this.getStore().clearFilter();
-                        },
-                        margin: '0 30 0 5',
-                        allowBlank: false
-                    },
-                    {
-                        id: 'add_docNo',
-                        xtype: 'textfield',
-                        fieldLabel: 'Nr. doc.',
-                        enableKeyEvents: true,
-                        margin: '0 30 0 0',
-                        allowBlank: false
-                    },
-                    {
-                        id: 'add_providerId',
+                        id: 'get_providerId',
                         xtype: 'textfield',
                         fieldLabel: 'Cod furnizor',
+                        margin: '0 30 0 5',
+                        queryMode: 'local',
                         enableKeyEvents: true,
-                        margin: '0 30 0 0',
-                        allowBlank: false
+                        valueField: 'id',
+                        bind:'{providerId}',
+                        store: 'providerStore',
+                        listeners: {
+                            'focusenter' : function() {
+                                this.setValue("");
+                            },
+                            'change': 'onIdChange'
+                        }
                     },
                     {
-                        id: 'add_providerName',
+                        id: 'get_providerName',
                         xtype: 'textfield',
                         fieldLabel: 'Nume furnizor',
                         margin: '0 30 0 0',
-                        allowBlank: false
+                        bind:'{providerName}',
+                        store: 'providerStore',
                     },
                     {
-                        id: 'add_releasDate',
-                        xtype: 'textfield',
-                        fieldLabel: 'Data',
-                        allowBlank: false
+                        id: 'get_releaseDate',
+                        xtype: 'datefield',
+                        fieldLabel: 'Eliberat intre',
+                        margin: '0 10 5 0'
+                    },
+                    {
+                        id: 'get_end_releaseDate',
+                        xtype: 'datefield',
+                        margin: '0 30 5 0'
+                    },
+                    {
+                        id: 'get_dueDate',
+                        xtype: 'datefield',
+                        fieldLabel: 'Data scadenta',
+                        margin: '0 30 5 0'
                     }]
-            },
-                {
-                    layout: 'hbox',
-                    items: [
-                        {
-                            id: 'add_dueDate',
-                            xtype: 'textfield',
-                            fieldLabel: 'Data scadenta',
-                            margin: '5 30 5 5'
-                        },
-                        {
-                            id: 'add_value',
-                            xtype: 'textfield',
-                            fieldLabel: 'Valoare',
-                            margin: '5 30 5 0',
-                            allowBlank: false
-                        },
-                        {
-                            id: 'add_tva',
-                            xtype: 'textfield',
-                            fieldLabel: 'TVA',
-                            margin: '5 30 5 0'
-                        },
-                        {
-                            id: 'add_total',
-                            xtype: 'textfield',
-                            fieldLabel: 'Total',
-                            margin: '5 30 5 0',
-                            allowBlank: false
-                        },
-                        {
-                            id: 'add_toPay',
-                            xtype: 'textfield',
-                            fieldLabel: 'Neachitat',
-                            enableKeyEvents: true,
-                            listeners: {
-                                'keypress': function (form, event) {
-                                    if (event.getKey() == event.ENTER) {
-                                        var myBtn = Ext.getCmp('add_saveButton');
-                                        myBtn.fireHandler();
-                                    }
-                                }
-                            },
-                            margin: '5 30 5 0',
-                            allowBlank: false
-                        }
-                    ]
-                }
+            }
             ],
             buttons: [
                 {
                     xtype: 'button',
                     text: 'Reset',
-                    width: 70,
                     handler: 'onIReset'
                 },
                 {
-                    id: 'add_saveButton',
                     xtype: 'button',
-                    text: 'Save',
-                    width: 70,
-                    formBind: true,
-                    handler: 'onISave'
+                    text: 'Search',
+                    handler: 'onISearch'
+                },
+                {
+                    xtype: 'button',
+                    text: 'New',
+                    handler: 'onCreateInputEntry'
                 },
                 {
                     xtype: 'button',
                     text: 'Provider',
-                    width: 70,
                     handler: 'onProviderClick'
                 }
             ]
@@ -248,12 +185,15 @@ Ext.define('Gui.view.input.InputView', {
                     flex: 1,
                     renderer: function(value) {
                         return Ext.Date.format(new Date(value), 'd.m.Y');
-                    },
+                    }
                 },
                 {
                     text: 'Data scadenta',
                     dataIndex: 'dueDate',
                     resizable: true,
+                    renderer: function(value) {
+                        return Ext.Date.format(new Date(value), 'd.m.Y');
+                    },
                     flex: 1
                 },
                 {

@@ -17,7 +17,8 @@ Ext.define('Gui.store.InputStore', {
         type: 'ajax',
         url: Gui.util.RestApiUrlUtil.getGetInputUrl(),
         reader: {
-            type: 'json'
+            type: 'json',
+            rootProperty: 'content'
         }
     }
 });
