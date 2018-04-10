@@ -23,7 +23,7 @@ Ext.define('Gui.util.RestApiUrlUtil', {
             return this.getBasePath() + "/get_single_input";
         },
 
-        getGetAddProviderUrl: function () {
+        getAddProviderUrl: function () {
             return this.getBasePath() + "/add_provider";
         },
 

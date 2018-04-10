@@ -9,7 +9,8 @@ Ext.define('Gui.Application', {
     ],
 
     stores: [
-        'InputStore'
+        'InputStore',
+        'ProviderStore'
     ],
 
     // launch: function() {

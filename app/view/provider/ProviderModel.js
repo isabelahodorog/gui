@@ -1,22 +1,22 @@
-Ext.define('Gui.view.input.InputModel', {
+Ext.define('Gui.view.provider.ProviderModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.input',
+    alias: 'viewmodel.provider',
 
     links: {
-        input: {
-            type: 'Gui.model.InputModel',
+        provider: {
+            type: 'Gui.model.ProviderModel',
             create: true
         }
     },
 
     data: {
-        'inputStore': null,
+        'providerStore': null,
         'providerName': null,
         'providerId': null
     },
 
-    setInputStore: function (store) {
-        this.set('inputStore', store)
+    setProviderStore: function (store) {
+        this.set('providerStore', store)
     },
 
     setProviderName: function (providerName) {

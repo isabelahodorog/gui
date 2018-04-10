@@ -128,7 +128,7 @@ Ext.define('Gui.view.input.InputController', {
             method: 'GET',
             scope: this,
             headers: {
-                'Content-Type:': 'application/json'
+                'Content-Type': 'application/json'
             },
             success: function (response, opts) {
                 var result = Ext.decode(response.responseText);
@@ -151,7 +151,7 @@ Ext.define('Gui.view.input.InputController', {
             method: 'GET',
             scope: this,
             headers: {
-                'Content-Type:': 'application/json'
+                'Content-Type': 'application/json'
             },
             success: function (response, opts) {
                 var result = Ext.decode(response.responseText);
@@ -162,5 +162,16 @@ Ext.define('Gui.view.input.InputController', {
                 console.log('server-side failure with status code ' + response.status);
             }
         });
+    },
+
+    onProviderClick: function() {
+        Ext.create({
+            xtype: 'form-provider'
+        }).show();
+
+        var store = Ext.getStore('providerStore');
+
+        store.reload();
+        // this.getViewModel().setProviderStore(store);
     }
 });
