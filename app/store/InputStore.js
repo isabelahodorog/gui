@@ -14,7 +14,7 @@ Ext.define('Gui.store.InputStore', {
     model: 'Gui.model.InputModel',
 
     proxy: {
-        type: 'ajax',
+        type: 'rest',
         url: Gui.util.RestApiUrlUtil.getGetInputUrl(),
         reader: {
             type: 'json',

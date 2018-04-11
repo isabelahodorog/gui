@@ -14,7 +14,7 @@ Ext.define('Gui.store.ProviderStore', {
     model: 'Gui.model.ProviderModel',
 
     proxy: {
-        type: 'ajax',
+        type: 'rest',
         url: Gui.util.RestApiUrlUtil.getGetProviderUrl(),
         reader: {
             type: 'json',
