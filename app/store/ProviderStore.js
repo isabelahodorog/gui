@@ -10,7 +10,7 @@ Ext.define('Gui.store.ProviderStore', {
         'Ext.data.reader.Json'
     ],
 
-    autoLoad: true,
+    autoLoad: false,
     model: 'Gui.model.ProviderModel',
 
     proxy: {

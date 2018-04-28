@@ -10,7 +10,7 @@ Ext.define('Gui.store.InputStore', {
         'Ext.data.reader.Json'
     ],
 
-    autoLoad: true,
+    autoLoad: false,
     model: 'Gui.model.InputModel',
 
     proxy: {

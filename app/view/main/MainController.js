@@ -92,5 +92,17 @@ Ext.define('Gui.view.main.MainController', {
 
     onRouteChange:function(id){
         this.setCurrentView(id);
+    },
+
+    onLogout: function(){
+    Ext.Msg.confirm('Logout?', 'Are you sure you want to logout?', function(answer){
+        if (answer === "yes") {
+            Ext.util.Cookies.clear('myCookie');
+            window.location.href = "";
+            Ext.create({
+                xtype: 'login'
+            });
+        }
+    });
     }
 });

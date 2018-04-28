@@ -5,17 +5,24 @@ Ext.define('Gui.Application', {
 
     models: [
         'InputModel',
-        'ProviderModel'
+        'ProviderModel',
+        'AccountOwnerModel'
     ],
 
     stores: [
         'InputStore',
-        'ProviderStore'
+        'ProviderStore',
+        'AccountOwnerStore'
     ],
 
-    // launch: function() {
-    //     Ext.create('app-main')
-    // },
+    launch: function () {
+        var loggedIn = Ext.util.Cookies.get('myCookie');
+
+        Ext.create({
+            xtype: loggedIn ? 'app-main' : 'login'
+            // xtype: 'login'
+        });
+    },
 
     onAppUpdate: function () {
         Ext.Msg.confirm('Application Update', 'This application has an update, reload?',

@@ -48,6 +48,20 @@ Ext.define('Gui.view.main.Main', {
                     value: 'INPUT',
                     fieldStyle: 'font-size: 60px',
                     cls: 'application-name'
+                },
+                {
+                    xtype: 'tbspacer',
+                    flex: 1
+                },
+                {
+                    xtype: 'displayfield',
+                    bind: '<span>Welcome, {email}</span>'
+                },
+                {
+                    xtype: 'button',
+                    text: 'Logout',
+                    width: 70,
+                    handler: 'onLogout'
                 }
             ]
         },
